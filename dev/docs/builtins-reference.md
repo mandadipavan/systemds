@@ -423,21 +423,27 @@ It learns one-against-the-rest binary-class classifiers by making a function cal
 
 ### Usage
 ---
-msvm(X,Y,icpt=False,num_class=10,epsilon=0.001,lambda=1.0,maxiter=100,verbose=False);
----
+msvm(X,Y, icpt=False, num_classes=10, epsilon=0.001, lamda=1.0, maxiter=100, verbose=False);
+
+--- 
 
 ### Arguments
-NAME            TYPE    DEFAULT     MEANING
- ---------------------------------------------------------------------------------------------
- verbose         Boolean False       Set to true to print while training.
- ---------------------------------------------------------------------------------------------
+| Name          | Type             | Default    | Description |
+| :------       | :-------------   | --------   | :---------- |
+| X             | Double           | ---        | Matrix X of feature vectors.|
+| Y             | Double           | ---        | Matrix Y of class labels. |
+| intercept     | Boolean          | False      | No Intercept ( If set to TRUE then a constant bias column is added to X)|
+| num_classes   | Integer          | 10         | Number of classes.|
+| epsilon       | Double           | 0.001      | Procedure terminates early if the reduction in objective function value is less than                                                    epsilon (tolerance) times the initial objective function value.|
+| lamda         | Double           | 1.0        | Regularization parameter (lambda) for L2 regularization|
+| maxIterations | Interger         | 100        | Maximum number of conjugate gradient iterations|
+| verbose       | Boolean          | False      | Set to true to print while training.|
+
 
 ### Returns
- ---------------------------------------------------------------------------------------------
- NAME            TYPE    DEFAULT     MEANING
- ---------------------------------------------------------------------------------------------
- model           Double   ---        model matrix
-
+| Name    | Type           | Default  | Description |
+| :------ | :------------- | -------- | :---------- |
+| model   | Double         | ---      | Model matrix. |
 
 
 ### Example

@@ -388,9 +388,9 @@ corresponding `*.template` files during the first execution of the SystemDS exec
 When invoking the `./bin/systemml` or `.\bin\systemml.bat` with any of the prepackaged DML scripts
 you can omit the relative path to the DML script file. The following two commands are equivalent:
 
-    ./bin/systemml ./scripts/datagen/genLinearRegressionData.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
+    ./bin/systemds ./scripts/datagen/genRandData4LinearRegression.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
 
-    ./bin/systemml genLinearRegressionData.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
+    ./bin/systemds genRandData4LinearRegression.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
 
 In this guide we invoke the command with the relative folder to make it easier to look up the source
 of the DML scripts.
@@ -426,7 +426,7 @@ In this example, we'll generate a matrix of 1000 rows of 50 columns of test data
 this, a 51<sup>st</sup> column consisting of labels will
 be appended to the matrix.
 
-    ./bin/systemml ./scripts/datagen/genLinearRegressionData.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
+    ./bin/systemds ./scripts/datagen/genRandData4LinearRegression.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
 
 This generates the following files inside the `./temp` folder:
 
@@ -450,7 +450,7 @@ script with the `perc.csv` file created in the previous step:
 The `sample.dml` script will randomly sample rows from the `linRegData.csv` file and place them into 2 files based
 on the percentages specified in `perc.csv`. This will create two sample groups of roughly 50 percent each.
 
-    ./bin/systemml ./scripts/utils/sample.dml -nvargs X=linRegData.csv sv=perc.csv O=linRegDataParts ofmt=csv
+    ./bin/systemds ./scripts/utils/sample.dml -nvargs X=linRegData.csv sv=perc.csv O=linRegDataParts ofmt=csv
 
 
 This script creates two partitions of the original data and places them in a `linRegDataParts` folder. The files created
@@ -475,7 +475,7 @@ original data file equals the sum of the number of rows in `1` and `2`.
 
 The next task is to split the label column from the first sample. We can do this using the `splitXY.dml` script.
 
-    ./bin/systemml ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/1 y=51 OX=linRegData.train.data.csv OY=linRegData.train.labels.csv ofmt=csv
+    ./bin/systemds ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/1 y=51 OX=linRegData.train.data.csv OY=linRegData.train.labels.csv ofmt=csv
 
 This splits column 51, the label column, off from the data. When done, the following files have been created.
 
@@ -491,7 +491,7 @@ This splits column 51, the label column, off from the data. When done, the follo
 
 We also need to split the label column from the second sample.
 
-    ./bin/systemml ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/2 y=51 OX=linRegData.test.data.csv OY=linRegData.test.labels.csv ofmt=csv
+    ./bin/systemds ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/2 y=51 OX=linRegData.test.data.csv OY=linRegData.test.labels.csv ofmt=csv
 
 This splits column 51 off the data, resulting in the following files:
 
@@ -509,7 +509,7 @@ Now, we can train our model based on the first sample. To do this, we utilize th
 Direct Solve) script. Note that SystemDS also includes a `LinearRegCG.dml` (Linear Regression Conjugate Gradient)
 algorithm for situations where the number of features is large.
 
-    ./bin/systemml ./scripts/algorithms/LinearRegDS.dml -nvargs X=linRegData.train.data.csv Y=linRegData.train.labels.csv B=betas.csv fmt=csv
+    ./bin/systemds ./scripts/algorithms/LinearRegDS.dml -nvargs X=linRegData.train.data.csv Y=linRegData.train.labels.csv B=betas.csv fmt=csv
 
 This will generate the following files:
 
@@ -547,7 +547,7 @@ To test our model on the second sample, we can use the `GLM-predict.dml` script.
 prediction and scoring. Here, we're using it for scoring since we include the `Y` named argument. Our `betas.csv`
 file is specified as the `B` named argument.
 
-    ./bin/systemml ./scripts/algorithms/GLM-predict.dml -nvargs X=linRegData.test.data.csv Y=linRegData.test.labels.csv B=betas.csv fmt=csv
+    ./bin/systemds ./scripts/algorithms/GLM-predict.dml -nvargs X=linRegData.test.data.csv Y=linRegData.test.labels.csv B=betas.csv fmt=csv
 
 This generates statistics similar to the following to standard output.
 
@@ -585,17 +585,17 @@ For convenience, we can encapsulate our DML invocations in a single script:
 
 	#!/bin/bash
 
-	./bin/systemml ./scripts/datagen/genLinearRegressionData.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
+	./bin/systemds ./scripts/datagen/genLinearRegressionData.dml -nvargs numSamples=1000 numFeatures=50 maxFeatureValue=5 maxWeight=5 addNoise=FALSE b=0 sparsity=0.7 output=linRegData.csv format=csv perc=0.5
 
-	./bin/systemml ./scripts/utils/sample.dml -nvargs X=linRegData.csv sv=perc.csv O=linRegDataParts ofmt=csv
+	./bin/systemds ./scripts/utils/sample.dml -nvargs X=linRegData.csv sv=perc.csv O=linRegDataParts ofmt=csv
 
-	./bin/systemml ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/1 y=51 OX=linRegData.train.data.csv OY=linRegData.train.labels.csv ofmt=csv
+	./bin/systemds ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/1 y=51 OX=linRegData.train.data.csv OY=linRegData.train.labels.csv ofmt=csv
 
-	./bin/systemml ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/2 y=51 OX=linRegData.test.data.csv OY=linRegData.test.labels.csv ofmt=csv
+	./bin/systemds ./scripts/utils/splitXY.dml -nvargs X=linRegDataParts/2 y=51 OX=linRegData.test.data.csv OY=linRegData.test.labels.csv ofmt=csv
 
-	./bin/systemml ./scripts/algorithms/LinearRegDS.dml -nvargs X=linRegData.train.data.csv Y=linRegData.train.labels.csv B=betas.csv fmt=csv
+	./bin/systemds ./scripts/algorithms/LinearRegDS.dml -nvargs X=linRegData.train.data.csv Y=linRegData.train.labels.csv B=betas.csv fmt=csv
 
-	./bin/systemml ./scripts/algorithms/GLM-predict.dml -nvargs X=linRegData.test.data.csv Y=linRegData.test.labels.csv B=betas.csv fmt=csv
+	./bin/systemds ./scripts/algorithms/GLM-predict.dml -nvargs X=linRegData.test.data.csv Y=linRegData.test.labels.csv B=betas.csv fmt=csv
 
 
 # Troubleshooting

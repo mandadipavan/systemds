@@ -113,7 +113,7 @@ the data along with its metadata file `types.csv.mtd`.
 
 To run the `Univar-Stats.dml` algorithm, issue the following command (we set the optional argument `CONSOLE_OUTPUT` to `TRUE` to print the statistics to the console):
 
-    $ ./runStandaloneSystemDS.sh scripts/algorithms/Univar-Stats.dml -nvargs X=data/haberman.data TYPES=data/types.csv STATS=data/univarOut.mtx CONSOLE_OUTPUT=TRUE
+    $ ./bin/systemds ./scripts/algorithms/Univar-Stats.dml -nvargs X=../data/haberman.data TYPES=../data/types.csv STATS=../data/univarOut.mtx CONSOLE_OUTPUT=TRUE
 
     [...]
     -------------------------------------------------

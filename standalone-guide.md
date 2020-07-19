@@ -277,7 +277,7 @@ We will create the file `perc.csv` and `perc.csv.mtd` to define the sampling vec
 
 Let's run the sampling algorithm to create the two data samples:
 
-    $ ./runStandaloneSystemDS.sh scripts/utils/sample.dml -nvargs X=data/haberman.data sv=data/perc.csv O=data/haberman.part ofmt="csv"
+    $ ./bin/systemds ./scripts/utils/sample.dml -nvargs X=../data/haberman.data sv=../data/perc.csv O=../data/haberman.part ofmt="csv"
 
 
 ## Splitting Labels from Features
@@ -296,9 +296,9 @@ Parameters:
 We specify `y=4` as the 4th column contains the labels to be predicted and run
 the `splitXY.dml` algorithm on our training and test data sets.
 
-    $ ./runStandaloneSystemDS.sh scripts/utils/splitXY.dml -nvargs X=data/haberman.part/1 y=4 OX=data/haberman.train.data.csv OY=data/haberman.train.labels.csv ofmt="csv"
+    $ ./bin/systemds ./scripts/utils/splitXY.dml -nvargs X=../data/haberman.part/1 y=4 OX=../data/haberman.train.data.csv OY=../data/haberman.train.labels.csv ofmt="csv"
 
-    $ ./runStandaloneSystemDS.sh scripts/utils/splitXY.dml -nvargs X=data/haberman.part/2 y=4 OX=data/haberman.test.data.csv  OY=data/haberman.test.labels.csv  ofmt="csv"
+    $ ./bin/systemds ./scripts/utils/splitXY.dml -nvargs X=../data/haberman.part/2 y=4 OX=../data/haberman.test.data.csv  OY=../data/haberman.test.labels.csv  ofmt="csv"
 
 ## Training and Testing the Model
 
@@ -315,11 +315,11 @@ Now we need to train our model using the `l2-svm.dml` algorithm.
 
 The `l2-svm.dml` algorithm is used on our training data sample to train the model.
 
-    $ ./runStandaloneSystemDS.sh scripts/algorithms/l2-svm.dml -nvargs X=data/haberman.train.data.csv Y=data/haberman.train.labels.csv model=data/l2-svm-model.csv fmt="csv" Log=data/l2-svm-log.csv
+    $ ./bin/systemds ./scripts/algorithms/l2-svm.dml -nvargs X=../data/haberman.train.data.csv Y=../data/haberman.train.labels.csv model=../data/l2-svm-model.csv fmt="csv" Log=data/l2-svm-log.csv
 
 The `l2-svm-predict.dml` algorithm is used on our test data sample to predict the labels based on the trained model.
 
-    $ ./runStandaloneSystemDS.sh scripts/algorithms/l2-svm-predict.dml -nvargs X=data/haberman.test.data.csv Y=data/haberman.test.labels.csv model=data/l2-svm-model.csv fmt="csv" confusion=data/l2-svm-confusion.csv
+    $ ./bin/systemds ./scripts/algorithms/l2-svm-predict.dml -nvargs X=../data/haberman.test.data.csv Y=../data/haberman.test.labels.csv model=../data/l2-svm-model.csv fmt="csv" confusion=data/l2-svm-confusion.csv
 
 The console output should show the accuracy of the trained model in percent, i.e.:
 
